@@ -1,0 +1,422 @@
+mixed-port: 7893
+mode: rule
+allow-lan: true
+bind-address: "*"
+tcp-concurrent: true
+unified-delay: true
+log-level: info
+ipv6: true
+
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+external-controller: 0.0.0.0:9090
+external-ui-name: zashboard
+external-ui: ui
+secret: ""
+external-ui-url: https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip
+
+tun:
+  enable: true
+  stack: system
+  dns-hijack:
+    - 0.0.0.0:53
+  auto-route: true
+  auto-redirect: true
+
+sniffer:
+  enable: true
+  override-destination: true
+  parse-pure-ip: true
+  force-dns-mapping: true
+  sniff:
+    QUIC:
+      ports: [443]
+    TLS:
+      ports: [443, 8443]
+    HTTP:
+      ports: [80, 8080-8880]
+      override-destination: true
+  force-domain:
+    - "+.netflix.com"
+    - "+.nflxvideo.net"
+    - "+.amazonaws.com"
+    - "+.media.dssott.com"
+  skip-domain:
+    - "+.apple.com"
+    - Mijia Cloud
+    - dlg.io.mi.com
+    - "+.oray.com"
+    - "+.sunlogin.net"
+    - "+.push.apple.com"
+
+dns:
+  enable: true
+  listen: 0.0.0.0:7874
+  ipv6: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  respect-rules: false
+  default-nameserver:
+    - 114.114.114.114
+    - tls://223.5.5.5:853
+  nameserver:
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+
+proxies:
+  - name: "直连"
+    type: direct
+    udp: true
+
+proxy-providers:
+  机场订阅:
+    type: http
+    # 替换成你自己的机场订阅链接
+    url: "YOUR_SUBSCRIPTION_URL"
+    path: ./proxy_providers/airport.yaml
+    interval: 3600
+    proxy: DIRECT
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 300
+      timeout: 5000
+      lazy: true
+      expected-status: 204
+    override:
+      udp: true
+      skip-cert-verify: true
+      # 可选：给所有订阅节点统一加前缀，想关闭就改成 ""
+      additional-prefix: "[自定义机场] "
+    # 过滤机场常见“伪节点”，避免剩余流量/到期时间/官网等内容出现在节点列表
+    exclude-filter: "(?i)(剩余流量|流量剩余|套餐到期|到期时间|官网|官方网址|网站|订阅|到期|流量|重置|客服|工单|公告|通知|使用说明|剩余|有效期|expire|expiry|expired|traffic|bandwidth|remain|remaining|reset|官网地址|备用网址|home|dashboard)"
+
+proxy-groups:
+  - name: "一键代理"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/Rocket.png"
+    use:
+      - 机场订阅
+    proxies:
+      - "直连"
+
+  - name: "AI"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/ChatGPT.png"
+    use:
+      - 机场订阅
+    proxies:
+      - "一键代理"
+      - "直连"
+
+  - name: "Apple"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/Apple.png"
+    use:
+      - 机场订阅
+    proxies:
+      - "直连"
+      - "一键代理"
+
+  - name: "YouTube"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/YouTube.png"
+    use:
+      - 机场订阅
+    proxies:
+      - "一键代理"
+      - "直连"
+
+  - name: "Google"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/Google.png"
+    use:
+      - 机场订阅
+    proxies:
+      - "一键代理"
+      - "直连"
+
+  - name: "Microsoft"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/Microsoft.png"
+    use:
+      - 机场订阅
+    proxies:
+      - "一键代理"
+      - "直连"
+
+  - name: "Telegram"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/Telegram.png"
+    use:
+      - 机场订阅
+    proxies:
+      - "一键代理"
+      - "直连"
+
+  - name: "X"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/Twitter.png"
+    use:
+      - 机场订阅
+    proxies:
+      - "一键代理"
+      - "直连"
+
+  - name: "GitHub"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/GitHub.png"
+    use:
+      - 机场订阅
+    proxies:
+      - "一键代理"
+      - "直连"
+
+  - name: "TikTok"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/TikTok.png"
+    use:
+      - 机场订阅
+    proxies:
+      - "一键代理"
+      - "直连"
+
+  - name: "PT下载"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/OT.png"
+    use:
+      - 机场订阅
+    proxies:
+      - "直连"
+      - "一键代理"
+
+  - name: "海外"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/ForeignMedia.png"
+    use:
+      - 机场订阅
+    proxies:
+      - "一键代理"
+      - "直连"
+
+  - name: "兜底"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/MATCH.png"
+    use:
+      - 机场订阅
+    proxies:
+      - "海外"
+      - "一键代理"
+      - "直连"
+
+rule-providers:
+  private_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs
+    path: ./rules/private_domain.mrs
+    interval: 86400
+
+  private_ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs
+    path: ./rules/private_ip.mrs
+    interval: 86400
+
+  cn_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs
+    path: ./rules/cn_domain.mrs
+    interval: 86400
+
+  cn_ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs
+    path: ./rules/cn_ip.mrs
+    interval: 86400
+
+  geolocation-!cn:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs
+    path: ./rules/geolocation.mrs
+    interval: 86400
+
+  apple_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs
+    path: ./rules/apple_domain.mrs
+    interval: 86400
+
+  apple_ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/apple.mrs
+    path: ./rules/apple_ip.mrs
+    interval: 86400
+
+  google_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs
+    path: ./rules/google_domain.mrs
+    interval: 86400
+
+  google_ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.mrs
+    path: ./rules/google_ip.mrs
+    interval: 86400
+
+  microsoft_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs
+    path: ./rules/microsoft_domain.mrs
+    interval: 86400
+
+  telegram_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs
+    path: ./rules/telegram_domain.mrs
+    interval: 86400
+
+  telegram_ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs
+    path: ./rules/telegram_ip.mrs
+    interval: 86400
+
+  twitter_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/twitter.mrs
+    path: ./rules/twitter_domain.mrs
+    interval: 86400
+
+  twitter_ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/twitter.mrs
+    path: ./rules/twitter_ip.mrs
+    interval: 86400
+
+  github_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs
+    path: ./rules/github_domain.mrs
+    interval: 86400
+
+  youtube_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs
+    path: ./rules/youtube_domain.mrs
+    interval: 86400
+
+  tiktok_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok.mrs
+    path: ./rules/tiktok_domain.mrs
+    interval: 86400
+
+  ai:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs
+    path: ./rules/ai.mrs
+    interval: 86400
+
+  openai:
+    type: inline
+    behavior: classical
+    payload:
+      - DOMAIN-SUFFIX,chatgpt.com
+      - DOMAIN-SUFFIX,openai.com
+      - DOMAIN,api.openai.com
+      - DOMAIN-SUFFIX,oaistatic.com
+      - DOMAIN-SUFFIX,oaiusercontent.com
+
+  claude:
+    type: inline
+    behavior: classical
+    payload:
+      - DOMAIN-SUFFIX,claude.ai
+      - DOMAIN-SUFFIX,anthropic.com
+      - DOMAIN,api.anthropic.com
+
+  pt_tracker:
+    type: inline
+    behavior: classical
+    payload:
+      - DOMAIN-KEYWORD,tracker
+      - DOMAIN-KEYWORD,announce
+      - DOMAIN-KEYWORD,scrape
+      - DOMAIN-SUFFIX,opentrackr.org
+      - DOMAIN-SUFFIX,nyaa.si
+      - DOMAIN-SUFFIX,m-team.io
+      - DOMAIN-SUFFIX,pterclub.com
+      - DOMAIN-SUFFIX,hdhome.org
+      - DOMAIN-SUFFIX,ourbits.club
+      - DOMAIN-SUFFIX,ttg.im
+
+rules:
+  - RULE-SET,private_domain,直连
+  - RULE-SET,private_ip,直连,no-resolve
+
+  - RULE-SET,openai,AI
+  - RULE-SET,claude,AI
+  - RULE-SET,ai,AI
+
+  - RULE-SET,pt_tracker,PT下载
+
+  - RULE-SET,apple_domain,Apple
+  - RULE-SET,apple_ip,Apple,no-resolve
+
+  - RULE-SET,github_domain,GitHub
+  - RULE-SET,youtube_domain,YouTube
+  - RULE-SET,google_domain,Google
+  - RULE-SET,microsoft_domain,Microsoft
+  - RULE-SET,telegram_domain,Telegram
+  - RULE-SET,tiktok_domain,TikTok
+  - RULE-SET,twitter_domain,X
+
+  - RULE-SET,google_ip,Google,no-resolve
+  - RULE-SET,telegram_ip,Telegram,no-resolve
+  - RULE-SET,twitter_ip,X,no-resolve
+
+  - RULE-SET,cn_domain,直连
+  - RULE-SET,cn_ip,直连,no-resolve
+
+  - RULE-SET,geolocation-!cn,海外
+
+  - MATCH,兜底
