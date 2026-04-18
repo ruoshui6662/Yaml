@@ -108,7 +108,7 @@ proxies:
     idle-session-check-interval: 30
     idle-session-timeout: 30
     min-idle-session: 0
-    # 如有域名可填写
+    # 如后续拿到域名可取消注释
     # sni: "YOUR_ANYTLS_SNI"
 
 proxy-groups:
@@ -136,10 +136,10 @@ proxy-groups:
     icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/Apple.png"
     proxies:
       - "一键代理"
-      - "直连"
       - "Hysteria2"
       - "VLESS-Reality"
       - "AnyTLS"
+      - "直连"
 
   - name: "YouTube"
     type: select
@@ -216,10 +216,10 @@ proxy-groups:
     icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/OT.png"
     proxies:
       - "一键代理"
-      - "直连"
       - "Hysteria2"
       - "VLESS-Reality"
       - "AnyTLS"
+      - "直连"
 
   - name: "海外"
     type: select
@@ -235,8 +235,8 @@ proxy-groups:
     type: select
     icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/MATCH.png"
     proxies:
-      - "一键代理"
       - "海外"
+      - "一键代理"
       - "直连"
 
 rule-providers:
@@ -418,9 +418,6 @@ rule-providers:
       - DOMAIN-SUFFIX,ttg.im
 
 rules:
-  # 如果 PT 下载器是固定设备，取消注释并改成你的下载机 IP
-  # - SRC-IP-CIDR,192.168.50.10/32,直连
-
   - RULE-SET,private_domain,直连
   - RULE-SET,private_ip,直连,no-resolve
 
