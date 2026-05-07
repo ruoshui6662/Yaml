@@ -1,0 +1,496 @@
+mixed-port: 7893
+mode: rule
+allow-lan: true
+bind-address: "*"
+tcp-concurrent: true
+unified-delay: true
+log-level: info
+ipv6: false
+
+profile:
+  store-selected: false
+  store-fake-ip: true
+
+external-controller: 0.0.0.0:9090
+external-ui-name: zashboard
+external-ui: ui
+secret: ""
+external-ui-url: https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip
+
+tun:
+  enable: true
+  stack: system
+  dns-hijack:
+    - 0.0.0.0:53
+  auto-route: true
+  auto-redirect: true
+
+sniffer:
+  enable: true
+  override-destination: true
+  parse-pure-ip: true
+  force-dns-mapping: true
+  sniff:
+    QUIC:
+      ports: [443]
+    TLS:
+      ports: [443, 8443]
+    HTTP:
+      ports: [80, 8080-8880]
+      override-destination: true
+  force-domain:
+    - "+.netflix.com"
+    - "+.nflxvideo.net"
+    - "+.amazonaws.com"
+    - "+.media.dssott.com"
+    - "+.claude.ai"
+    - "+.anthropic.com"
+    - "+.copilot.microsoft.com"
+    - "+.bing.com"
+  skip-domain:
+    - "+.apple.com"
+    - Mijia Cloud
+    - dlg.io.mi.com
+    - "+.oray.com"
+    - "+.sunlogin.net"
+    - "+.push.apple.com"
+
+dns:
+  enable: true
+  listen: 0.0.0.0:7874
+  ipv6: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  respect-rules: false
+  default-nameserver:
+    - 114.114.114.114
+    - tls://223.5.5.5:853
+  nameserver:
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+
+proxies:
+  - name: "直连"
+    type: direct
+    udp: true
+
+  # GitHub 公开版占位节点：不会泄露任何真实节点信息
+  # 私用时只需要把这一段替换成你的真实节点，并保持 name: "节点占位" 不变
+  - name: "节点占位"
+    type: direct
+    udp: true
+
+proxy-groups:
+  - name: "一键代理"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/Rocket.png"
+    proxies:
+      - "节点占位"
+      - "直连"
+
+  - name: "广告拦截"
+    type: select
+    icon: "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f6e1.svg"
+    proxies:
+      - REJECT
+      - "直连"
+
+  - name: "NSFW"
+    type: select
+    icon: "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f51e.svg"
+    proxies:
+      - REJECT
+      - "直连"
+
+  - name: "AI"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/ChatGPT.png"
+    proxies:
+      - "节点占位"
+      - "一键代理"
+      - "直连"
+
+  - name: "Apple"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/Apple.png"
+    proxies:
+      - "一键代理"
+      - "节点占位"
+      - "直连"
+
+  - name: "YouTube"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/YouTube.png"
+    proxies:
+      - "节点占位"
+      - "一键代理"
+      - "直连"
+
+  - name: "Google"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/Google.png"
+    proxies:
+      - "节点占位"
+      - "一键代理"
+      - "直连"
+
+  - name: "Microsoft"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/Microsoft.png"
+    proxies:
+      - "节点占位"
+      - "一键代理"
+      - "直连"
+
+  - name: "Telegram"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/Telegram.png"
+    proxies:
+      - "节点占位"
+      - "一键代理"
+      - "直连"
+
+  - name: "X"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/Twitter.png"
+    proxies:
+      - "节点占位"
+      - "一键代理"
+      - "直连"
+
+  - name: "GitHub"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/GitHub.png"
+    proxies:
+      - "节点占位"
+      - "一键代理"
+      - "直连"
+
+  - name: "TikTok"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/TikTok.png"
+    proxies:
+      - "节点占位"
+      - "一键代理"
+      - "直连"
+
+  - name: "PT下载"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/OT.png"
+    proxies:
+      - "直连"
+      - "一键代理"
+      - "节点占位"
+
+  - name: "海外"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/ForeignMedia.png"
+    proxies:
+      - "节点占位"
+      - "一键代理"
+
+  - name: "兜底"
+    type: select
+    icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/MATCH.png"
+    proxies:
+      - "节点占位"
+      - "海外"
+      - "一键代理"
+
+rule-providers:
+  private_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs
+    path: ./rules/private_domain.mrs
+    interval: 86400
+    proxy: 节点占位
+
+  private_ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs
+    path: ./rules/private_ip.mrs
+    interval: 86400
+    proxy: 节点占位
+
+  force_proxy:
+    type: inline
+    behavior: classical
+    payload:
+      - DOMAIN-SUFFIX,browserleaks.com
+      - DOMAIN-SUFFIX,browserleaks.org
+      - DOMAIN-SUFFIX,dnsleaktest.com
+      - DOMAIN-SUFFIX,ipleak.net
+      - DOMAIN-SUFFIX,ipleak.org
+      - DOMAIN-SUFFIX,ipinfo.io
+      - DOMAIN-SUFFIX,ip-api.com
+      - DOMAIN-SUFFIX,ipify.org
+      - DOMAIN-SUFFIX,icanhazip.com
+      - DOMAIN-SUFFIX,ifconfig.me
+      - DOMAIN-SUFFIX,ident.me
+      - DOMAIN-SUFFIX,whoer.net
+      - DOMAIN-SUFFIX,test-ipv6.com
+      - DOMAIN-SUFFIX,myip.la
+      - DOMAIN-SUFFIX,ip.sb
+
+  oisd_nsfw:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/legiz-ru/mihomo-rule-sets/main/oisd/nsfw.mrs
+    path: ./rules/oisd_nsfw.mrs
+    interval: 86400
+    proxy: 节点占位
+
+  nsfw_extra:
+    type: http
+    behavior: classical
+    format: text
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Porn.list
+    path: ./rules/nsfw_extra.list
+    interval: 86400
+    proxy: 节点占位
+
+  adblock:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockmihomo.mrs
+    path: ./rules/adblockmihomo.mrs
+    interval: 28800
+    proxy: 节点占位
+
+  cn_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs
+    path: ./rules/cn_domain.mrs
+    interval: 86400
+    proxy: 节点占位
+
+  cn_ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs
+    path: ./rules/cn_ip.mrs
+    interval: 86400
+    proxy: 节点占位
+
+  geolocation-!cn:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs
+    path: ./rules/geolocation.mrs
+    interval: 86400
+    proxy: 节点占位
+
+  apple_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs
+    path: ./rules/apple_domain.mrs
+    interval: 86400
+    proxy: 节点占位
+
+  apple_ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/apple.mrs
+    path: ./rules/apple_ip.mrs
+    interval: 86400
+    proxy: 节点占位
+
+  google_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs
+    path: ./rules/google_domain.mrs
+    interval: 86400
+    proxy: 节点占位
+
+  google_ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.mrs
+    path: ./rules/google_ip.mrs
+    interval: 86400
+    proxy: 节点占位
+
+  microsoft_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs
+    path: ./rules/microsoft_domain.mrs
+    interval: 86400
+    proxy: 节点占位
+
+  telegram_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs
+    path: ./rules/telegram_domain.mrs
+    interval: 86400
+    proxy: 节点占位
+
+  telegram_ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs
+    path: ./rules/telegram_ip.mrs
+    interval: 86400
+    proxy: 节点占位
+
+  twitter_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/twitter.mrs
+    path: ./rules/twitter_domain.mrs
+    interval: 86400
+    proxy: 节点占位
+
+  twitter_ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/twitter.mrs
+    path: ./rules/twitter_ip.mrs
+    interval: 86400
+    proxy: 节点占位
+
+  github_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs
+    path: ./rules/github_domain.mrs
+    interval: 86400
+    proxy: 节点占位
+
+  youtube_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs
+    path: ./rules/youtube_domain.mrs
+    interval: 86400
+    proxy: 节点占位
+
+  tiktok_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok.mrs
+    path: ./rules/tiktok_domain.mrs
+    interval: 86400
+    proxy: 节点占位
+
+  ai:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs
+    path: ./rules/ai.mrs
+    interval: 86400
+    proxy: 节点占位
+
+  ai_manual:
+    type: inline
+    behavior: classical
+    payload:
+      - DOMAIN-SUFFIX,chatgpt.com
+      - DOMAIN-SUFFIX,openai.com
+      - DOMAIN,api.openai.com
+      - DOMAIN-SUFFIX,oaistatic.com
+      - DOMAIN-SUFFIX,oaiusercontent.com
+      - DOMAIN-SUFFIX,claude.ai
+      - DOMAIN-SUFFIX,anthropic.com
+      - DOMAIN-SUFFIX,claudeusercontent.com
+      - DOMAIN,api.anthropic.com
+      - DOMAIN,console.anthropic.com
+      - DOMAIN,statsig.anthropic.com
+      - DOMAIN-SUFFIX,copilot.microsoft.com
+      - DOMAIN-SUFFIX,copilot.cloud.microsoft
+      - DOMAIN-SUFFIX,bingapis.com
+      - DOMAIN-SUFFIX,edgeservices.bing.com
+      - DOMAIN-SUFFIX,microsoftonline.com
+      - DOMAIN-SUFFIX,live.com
+      - DOMAIN-SUFFIX,sfx.ms
+      - DOMAIN-SUFFIX,trafficmanager.net
+
+  pt_tracker:
+    type: inline
+    behavior: classical
+    payload:
+      - DOMAIN-KEYWORD,tracker
+      - DOMAIN-KEYWORD,announce
+      - DOMAIN-KEYWORD,scrape
+      - DOMAIN-SUFFIX,opentrackr.org
+      - DOMAIN-SUFFIX,nyaa.si
+      - DOMAIN-SUFFIX,m-team.io
+      - DOMAIN-SUFFIX,pterclub.com
+      - DOMAIN-SUFFIX,hdhome.org
+      - DOMAIN-SUFFIX,ourbits.club
+      - DOMAIN-SUFFIX,ttg.im
+
+rules:
+  - RULE-SET,private_domain,直连
+  - RULE-SET,private_ip,直连,no-resolve
+
+  # 被 cn_domain 误判的检测/海外站点，强制走代理
+  - RULE-SET,force_proxy,节点占位
+
+  # NSFW 内容拦截：OISD 主规则 + ACL4SSR 补充规则
+  - RULE-SET,oisd_nsfw,NSFW
+  - RULE-SET,nsfw_extra,NSFW
+
+  # 广告拦截：Mihomo 专用合并规则
+  - RULE-SET,adblock,广告拦截
+
+  # AI 服务
+  - RULE-SET,ai_manual,AI
+  - RULE-SET,ai,AI
+
+  # PT 下载
+  - RULE-SET,pt_tracker,PT下载
+
+  # Apple
+  - RULE-SET,apple_domain,Apple
+  - RULE-SET,apple_ip,Apple,no-resolve
+
+  # 常见海外服务
+  - RULE-SET,github_domain,GitHub
+  - RULE-SET,youtube_domain,YouTube
+  - RULE-SET,google_domain,Google
+  - RULE-SET,microsoft_domain,Microsoft
+  - RULE-SET,telegram_domain,Telegram
+  - RULE-SET,tiktok_domain,TikTok
+  - RULE-SET,twitter_domain,X
+
+  # 常见海外服务 IP
+  - RULE-SET,google_ip,Google,no-resolve
+  - RULE-SET,telegram_ip,Telegram,no-resolve
+  - RULE-SET,twitter_ip,X,no-resolve
+
+  # 国内直连
+  - RULE-SET,cn_domain,直连
+  - RULE-SET,cn_ip,直连,no-resolve
+
+  # 海外域名
+  - RULE-SET,geolocation-!cn,海外
+
+  # 兜底
+  - MATCH,兜底
