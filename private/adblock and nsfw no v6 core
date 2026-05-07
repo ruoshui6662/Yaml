@@ -74,8 +74,8 @@ proxies:
     type: direct
     udp: true
 
-  # GitHub 公开版占位节点：不会泄露任何真实节点信息
-  # 私用时只需要把这一段替换成你的真实节点，并保持 name: "节点占位" 不变
+  # GitHub 公开版占位节点
+  # 私用时，将这一段替换成你的真实节点，并保持 name: "节点占位" 不变
   - name: "节点占位"
     type: direct
     udp: true
@@ -88,26 +88,12 @@ proxy-groups:
       - "节点占位"
       - "直连"
 
-  - name: "广告拦截"
-    type: select
-    icon: "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f6e1.svg"
-    proxies:
-      - REJECT
-      - "直连"
-
-  - name: "NSFW"
-    type: select
-    icon: "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f51e.svg"
-    proxies:
-      - REJECT
-      - "直连"
-
   - name: "AI"
     type: select
     icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/ChatGPT.png"
     proxies:
-      - "节点占位"
       - "一键代理"
+      - "节点占位"
       - "直连"
 
   - name: "Apple"
@@ -122,56 +108,56 @@ proxy-groups:
     type: select
     icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/YouTube.png"
     proxies:
-      - "节点占位"
       - "一键代理"
+      - "节点占位"
       - "直连"
 
   - name: "Google"
     type: select
     icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/Google.png"
     proxies:
-      - "节点占位"
       - "一键代理"
+      - "节点占位"
       - "直连"
 
   - name: "Microsoft"
     type: select
     icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/Microsoft.png"
     proxies:
-      - "节点占位"
       - "一键代理"
+      - "节点占位"
       - "直连"
 
   - name: "Telegram"
     type: select
     icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/Telegram.png"
     proxies:
-      - "节点占位"
       - "一键代理"
+      - "节点占位"
       - "直连"
 
   - name: "X"
     type: select
     icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/Twitter.png"
     proxies:
-      - "节点占位"
       - "一键代理"
+      - "节点占位"
       - "直连"
 
   - name: "GitHub"
     type: select
     icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/GitHub.png"
     proxies:
-      - "节点占位"
       - "一键代理"
+      - "节点占位"
       - "直连"
 
   - name: "TikTok"
     type: select
     icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/TikTok.png"
     proxies:
-      - "节点占位"
       - "一键代理"
+      - "节点占位"
       - "直连"
 
   - name: "PT下载"
@@ -186,16 +172,30 @@ proxy-groups:
     type: select
     icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/ForeignMedia.png"
     proxies:
-      - "节点占位"
       - "一键代理"
+      - "节点占位"
 
   - name: "兜底"
     type: select
     icon: "https://fastly.jsdelivr.net/gh/ruoshui6662/Yaml@main/icons/MATCH.png"
     proxies:
-      - "节点占位"
-      - "海外"
       - "一键代理"
+      - "海外"
+      - "节点占位"
+
+  - name: "广告拦截"
+    type: select
+    icon: "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f6e1.svg"
+    proxies:
+      - REJECT
+      - "直连"
+
+  - name: "NSFW"
+    type: select
+    icon: "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f51e.svg"
+    proxies:
+      - REJECT
+      - "直连"
 
 rule-providers:
   private_domain:
